@@ -1,0 +1,43 @@
+﻿{
+open FSharp.Text.Lexing
+open System
+open Parser
+
+exception SyntaxError of string
+
+let lexeme = LexBuffer.LexemeString
+
+let newline (lexbuf: LexBuffer<_>) = 
+    lexbuf.StartPos <- lexbuf.StartPos.NextLine
+}
+
+// Data types
+let int = ['-' '+']? ['0'-'9']+
+let down = "down" | "Down"
+let across = "across" | "Across"
+
+// Challenge types
+let LEX_CHALLENGE_PREFIX_SQUARES = "In order, the squares of"
+
+// English chars
+let comma = ',' | ", "
+let word_and = "and"
+let minus = "minus"
+
+// Misc character rules
+let white = [' ' '\t']+
+let newline = '\r' | '\n' | "\r\n"
+
+rule read =
+    parse
+    | white     { read lexbuf }
+    | newline   { newline lexbuf; read lexbuf }
+    | int       { INT (int (lexeme lexbuf)) }
+    | eof       { EOF }
+    | comma     { COMMA }
+    | word_and  { AND }
+    | minus     { MINUS }
+    | down      { DIRECTION_DOWN } 
+    | across    { DIRECTION_ACROSS }
+    | LEX_CHALLENGE_PREFIX_SQUARES { PARSE_CHALLENGE_PREFIX_SQUARES }
+    | _ { raise (Exception (sprintf "SyntaxError: Unexpected char: '%s' Line: %d Column: %d" (lexeme lexbuf) (lexbuf.StartPos.Line+1) lexbuf.StartPos.Column)) }

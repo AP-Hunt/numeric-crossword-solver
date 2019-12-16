@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="AST.fs" />
+    <None Include="Parser.fsy" />
+    <None Include="Lexer.fsl" />
+    <Compile Include="Parser.fs" />
+    <Compile Include="Lexer.fs" />
+    <Compile Include="QuestionParser.fs" />
+    <Compile Include="ChallengeGraph.fs" />
+  </ItemGroup>
+
+  <ItemGroup />
+
+  <ItemGroup>
+    <PackageReference Include="FsLexYacc" Version="10.0.0" />
+  </ItemGroup>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="C:\Users\bursh\.nuget\packages\fslexyacc\10.0.0\build\fsyacc\net46\fsyacc.exe -o Parser.fs --module Parser Parser.fsy" />
+    <Exec Command="C:\Users\bursh\.nuget\packages\fslexyacc\10.0.0\build\fslex\net46\fslex.exe -o Lexer.fs --module Lexer --unicode Lexer.fsl" />
+  </Target>
+
+
+
+</Project>
