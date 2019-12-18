@@ -5,13 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="AST.fs" />
+    <Compile Include="Types.fs" />
     <None Include="Parser.fsy" />
     <None Include="Lexer.fsl" />
     <Compile Include="Parser.fs" />
     <Compile Include="Lexer.fs" />
     <Compile Include="QuestionParser.fs" />
-    <Compile Include="ChallengeGraph.fs" />
+    <Compile Include="Solvers.fs" />
+    <Compile Include="Solver.fs" />
   </ItemGroup>
 
   <ItemGroup />

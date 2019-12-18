@@ -3,7 +3,7 @@
 open NUnit.Framework
 open FsCheck
 open FsCheck.NUnit
-open AST
+open Types
 open QuestionParser
 
 [<TestFixture>]
@@ -15,11 +15,11 @@ module SquaresQuestionParsingProperties =
             if ints.Length = 0 then
                 failwith "input was empty"
             elif ints.Length = 1 then
-                sprintf "In order, the squares of %d" ints.Head
+                sprintf "1 across: In order, the squares of %d" ints.Head
             else
                 let allButTail = ints.[0..ints.Length-2]
                 let last = ints.[ints.Length-1]
-                sprintf "In order, the squares of %s and %d" (allButTail |> List.map (fun x -> x.ToString()) |> String.concat ", ") last
+                sprintf "1 across: In order, the squares of %s and %d" (allButTail |> List.map (fun x -> x.ToString()) |> String.concat ", ") last
 
         let intListComparator = fun elem1 elem2 ->
                 if elem1 > elem2 then 1
@@ -36,6 +36,6 @@ module SquaresQuestionParsingProperties =
             let challenge = parseQuestionText questionText
 
             match challenge with
-            | Some (SquaresSequence xs) -> (List.compareWith intListComparator ints xs) = 0
+            | Some (_, SquaresSequence xs) -> (List.compareWith intListComparator ints xs) = 0
             | Some _ -> false
             | None -> false

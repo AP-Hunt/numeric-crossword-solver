@@ -7,6 +7,7 @@ type token =
   | DIRECTION_DOWN
   | MINUS
   | AND
+  | COLON
   | COMMA
   | LOCATION of (Location)
   | INT of (int)
@@ -17,6 +18,7 @@ type tokenId =
     | TOKEN_DIRECTION_DOWN
     | TOKEN_MINUS
     | TOKEN_AND
+    | TOKEN_COLON
     | TOKEN_COMMA
     | TOKEN_LOCATION
     | TOKEN_INT
@@ -27,6 +29,7 @@ type nonTerminalId =
     | NONTERM_start
     | NONTERM_root
     | NONTERM_challenge
+    | NONTERM_question
     | NONTERM_number_list
     | NONTERM_location
 /// This function maps tokens to integer indexes

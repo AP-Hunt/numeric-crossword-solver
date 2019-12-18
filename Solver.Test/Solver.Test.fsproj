@@ -8,8 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="SquareChallengeParsingProperties.fs" />
+    <Compile Include="Helpers.fs" />
+    <Compile Include="LocationParsingProperties.fs" />
+    <Compile Include="SquaresSequenceParsingProperties.fs" />
+    <Compile Include="SquaresSolvingTests.fs" />
     <Compile Include="LocationMinusLocationParsingProperties.fs" />
+    <Compile Include="LocationMinusLocationSolvingTests.fs" />
+    <Compile Include="SolverTests.fs" />
     <Compile Include="Tests.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>

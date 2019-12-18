@@ -3,7 +3,7 @@
 open NUnit.Framework
 open FsCheck
 open FsCheck.NUnit
-open AST
+open Types
 open QuestionParser
 
 [<TestFixture>]
@@ -14,7 +14,7 @@ module LocationMinusLocationParsingProperties =
         let formatQuestion (locationA: Location) (locationB: Location) =
             let locANum, locADir = locationA
             let locBNum, locBDir = locationB
-            sprintf "%d %A minus %d %A" locANum locADir locBNum locBDir
+            sprintf "1 across: %d %A minus %d %A" locANum locADir locBNum locBDir
         
         Arb.generate<Location>
         |> Gen.two
@@ -24,7 +24,7 @@ module LocationMinusLocationParsingProperties =
             let challenge = parseQuestionText questionText
 
             match challenge with
-            | Some (LocationMinusLocation (locA, locB)) -> (locA = a) && (locB = b)
+            | Some (_, LocationMinusLocation (locA, locB)) -> (locA = a) && (locB = b)
             | Some _ -> false
             | None -> false
 

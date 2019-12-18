@@ -1,6 +1,6 @@
 ﻿module QuestionParser
 
-open AST
+open Types
 open FSharp.Text.Lexing
 open Lexer
 open Parser
