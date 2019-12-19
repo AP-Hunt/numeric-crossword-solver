@@ -25,6 +25,19 @@ type SolverDispatcher = Location->SolverResult->SolverResult
 let private badQuestionTypeMsg solverName question =
         sprintf "%s cannot solve a question of type %s" solverName (question.GetType().FullName)
 
+let private setSolutionAnswer challenge solutions answer =
+    solutions
+    <!> Solutions.set (challenge, answer)
+
+let private solveDependents solverDispatcher solverResult dependentLocations =
+    let folder result elem =
+        result
+        |> solverDispatcher elem
+
+    dependentLocations
+    |> List.fold folder solverResult
+    
+
 let squareSequence solverResult (challenge: Challenge) =
     let (_, q) = challenge
     
@@ -37,10 +50,8 @@ let squareSequence solverResult (challenge: Challenge) =
             |> String.concat ""
             |> Convert.ToInt32
 
-        let solution = (challenge, Some(concattedInts))
-
         solverResult
-        <!> Solutions.set solution
+        <!> Solutions.set (challenge, Some(concattedInts))
         
       
     | _ -> Error (badQuestionTypeMsg "squareSequence" q)
@@ -61,14 +72,9 @@ let locationMinusLocation (solverDispatcher: SolverDispatcher) solverResult (cha
             | (Some(x), Some(y)) -> Ok(Some(x-y))
             | _ -> Error("either a or b was empty")
 
-        let setSolutionAnswer challenge solutions answer =
-            solutions
-            <!> Solutions.set (challenge, answer)
-
-        let solutionsAfterSolvingDependents =
-            solverResult
-            |> solverDispatcher a
-            |> solverDispatcher b
+        let solutionsAfterSolvingDependents = 
+            [a;b]
+            |> solveDependents solverDispatcher solverResult 
 
         solutionsAfterSolvingDependents
         <!> (Solutions.findSolutions [a;b]) 
@@ -77,6 +83,27 @@ let locationMinusLocation (solverDispatcher: SolverDispatcher) solverResult (cha
         <!> setSolutionAnswer challenge solutionsAfterSolvingDependents
 
     | _, q -> Error (badQuestionTypeMsg "locationMinusLocation" q)
+
+let oneQuarterOfLocation (solverDispatcher: SolverDispatcher) solverResult challenge =
+    match challenge with
+    | (_, OneQuarterOfLocation(location)) ->
+        let divideAnswerByFour solution =
+            let answer = (solution |> Solution.answer).Value
+            Ok(Some((answer/4)))
+
+
+
+        let solverAfterSolvingDependents = 
+            [location]
+            |> solveDependents solverDispatcher solverResult
+ 
+        solverAfterSolvingDependents
+        <!> (Solutions.findSolutionTo location)
+        <!> divideAnswerByFour
+        <!> setSolutionAnswer challenge solverAfterSolvingDependents
+
+
+    | (_, q) -> Error(badQuestionTypeMsg "oneQuarterOfLocation" q)
 
 let rec solverDispatcher location solverResult : SolverResult =   
     solverResult
@@ -94,4 +121,5 @@ let rec solverDispatcher location solverResult : SolverResult =
                 match challenge with
                 | _, (SquaresSequence _)            -> squareSequence solverResult challenge
                 | _, (LocationMinusLocation (_, _)) -> locationMinusLocation (solverDispatcher) solverResult challenge
+                | _, (OneQuarterOfLocation(_))      -> oneQuarterOfLocation (solverDispatcher) solverResult challenge
                 | _, (Unknown)                      -> Error("unknown challenge")

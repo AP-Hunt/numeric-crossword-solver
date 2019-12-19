@@ -23,5 +23,4 @@ module LocationParsingProperties =
 
             match challenge with
             | Some (location, _) -> location = loc
-            | Some _ -> false
             | None -> false

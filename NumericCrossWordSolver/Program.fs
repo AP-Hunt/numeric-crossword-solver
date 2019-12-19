@@ -28,13 +28,15 @@ let formatSolution solution =
 [<EntryPoint>]
 let main argv =
     let statements = [
+        locationMinusLocation 7 Across (5, Across) (6, Down)
         squares 1 Across [4; 5; 6]
         squares 4 Down [10; 2; 3;]
         squares 2 Down [7; 6;]
         squares 3 Across [22]
         locationMinusLocation 5 Across (1, Across) (4, Down)
         locationMinusLocation 6 Down (3, Across) (4, Down)
-    ]
+        "8 across: One-quarter of 5 across"
+     ]
 
     printfn "Questions ===="
     statements

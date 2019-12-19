@@ -18,9 +18,19 @@ type Location = (int * Direction)
 type Question =
     | SquaresSequence of List<int>
     | LocationMinusLocation of (Location * Location)
+    | OneQuarterOfLocation of Location
     | Unknown
 
 type Challenge = (Location * Question)
+
+module Challenge =
+    let location challenge =
+        let (loc, _) = challenge
+        loc
+
+    let question challenge = 
+        let (_, q) = challenge
+        q
 
 type Solution = (Challenge * int option)
 type Solutions = Solution list

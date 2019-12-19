@@ -14,6 +14,8 @@
     <Compile Include="SquaresSolvingTests.fs" />
     <Compile Include="LocationMinusLocationParsingProperties.fs" />
     <Compile Include="LocationMinusLocationSolvingTests.fs" />
+    <Compile Include="OneQuarterParsingProperties.fs" />
+    <Compile Include="OneQuarterSolvingTests.fs" />
     <Compile Include="SolverTests.fs" />
     <Compile Include="Tests.fs" />
     <Compile Include="Program.fs" />

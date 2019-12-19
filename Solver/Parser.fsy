@@ -19,6 +19,7 @@ open Types
 
 // Challenge tokens
 %token PARSE_CHALLENGE_PREFIX_SQUARES
+%token PARSE_CHALLENGE_PREFIX_ONE_QUARTER
 
 // Misc tokens
 %token EOF
@@ -37,13 +38,15 @@ root:
 
 challenge:
     | location COLON question { ($1, $3) }
-    | { failwith "unable to parse challenge %s " }
+    | { failwith "unable to parse challenge '%s'" }
 
 question:
     // QUESTION: Squares of ints
     | PARSE_CHALLENGE_PREFIX_SQUARES number_list    { SquaresSequence($2) }
     // QUESTION: location minus location
     | location MINUS location                       { LocationMinusLocation($1, $3) }
+    // QUESTION: one quarter of location
+    | PARSE_CHALLENGE_PREFIX_ONE_QUARTER location   { OneQuarterOfLocation($2) }
     // UNKNOWN
     | { Unknown }
 

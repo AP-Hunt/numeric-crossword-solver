@@ -25,10 +25,19 @@ let rec solveAllRec (dispatcher: SolverDispatcher) (solverResult: SolverResult) 
                 solveAllRec dispatcher (dispatcher location solverResult) (index+1)
 
 let solveAll (dispatcher: Solvers.SolverDispatcher) challenges =
-    let solutions: Solution list =
+    let allLocations = 
         challenges
-        |> List.map(fun challenge -> (challenge, None))
+        |> List.map (fun c -> c |> Challenge.location)
 
-    let initialResult: SolverResult = Ok(solutions)
+    let distinctLocations = allLocations |> List.distinct
 
-    solveAllRec dispatcher initialResult 0
+    if (allLocations.Length) <> (distinctLocations.Length) then
+        failwith "Duplicate location detected"
+    else
+        let solutions: Solution list =
+            challenges
+            |> List.map(fun challenge -> (challenge, None))
+
+        let initialResult: SolverResult = Ok(solutions)
+
+        solveAllRec dispatcher initialResult 0

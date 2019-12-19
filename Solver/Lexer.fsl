@@ -18,6 +18,7 @@ let across = "across" | "Across"
 
 // Challenge types
 let LEX_CHALLENGE_PREFIX_SQUARES = "In order, the squares of"
+let LEX_CHALLENGE_PREFIX_ONEQUARTER = "One-quarter of"
 
 // English chars
 let comma = ',' | ", "
@@ -41,5 +42,6 @@ rule read =
     | minus     { MINUS }
     | down      { DIRECTION_DOWN } 
     | across    { DIRECTION_ACROSS }
-    | LEX_CHALLENGE_PREFIX_SQUARES { PARSE_CHALLENGE_PREFIX_SQUARES }
+    | LEX_CHALLENGE_PREFIX_SQUARES      { PARSE_CHALLENGE_PREFIX_SQUARES }
+    | LEX_CHALLENGE_PREFIX_ONEQUARTER   { PARSE_CHALLENGE_PREFIX_ONE_QUARTER }
     | _ { raise (Exception (sprintf "SyntaxError: Unexpected char: '%s' Line: %d Column: %d" (lexeme lexbuf) (lexbuf.StartPos.Line+1) lexbuf.StartPos.Column)) }
