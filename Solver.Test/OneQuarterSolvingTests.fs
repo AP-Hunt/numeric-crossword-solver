@@ -10,11 +10,11 @@ open Types
 module OneQuarterSolvingTests =
     [<Test>]
     let ``divides the answer at the location by 4`` () =
-        let fixutres = [
+        let fixtures = [
             (2, Across), 100;
         ]
         
-        let fakeDispatcher = Helpers.newFakeDispatcher (fixutres |> Map.ofList)
+        let fakeDispatcher = Helpers.newFakeDispatcher (fixtures |> Map.ofList)
 
         let challenge = OneQuarterOfLocation((2, Across))
 
@@ -25,9 +25,5 @@ module OneQuarterSolvingTests =
 
         ((1, Across), challenge)
         |> Solvers.oneQuarterOfLocation fakeDispatcher solutions
-        |> testResult (
-            fun solutions ->
-                solutions.[0]
-                |> Solution.answer
-                |> should equal (Some(25))
-        )
+        |> expectedAnswer (1, Across) (Some(25))
+        

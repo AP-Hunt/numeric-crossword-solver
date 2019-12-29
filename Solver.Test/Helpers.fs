@@ -1,5 +1,6 @@
 ﻿namespace Solver.Test
 
+open FsUnit
 open Types
 open Solvers
 
@@ -10,6 +11,16 @@ module Helpers =
         | Error(s) -> failwith "expected result to be OK, but got error"
 
         ()
+
+    let inline (<&>) result fn = testResult fn result
+
+    let expectedAnswer location answer solutions =
+        solutions
+        <!> Solutions.findSolutionTo location
+        <&> fun solution ->
+                solution
+                |> Solution.answer
+                |> should equal answer
 
 
     let newFakeDispatcher solutionFixtures =

@@ -20,23 +20,11 @@ module SquaresSolvingTests =
         SquaresSequence([2])
         |> toChallenge
         |> Solvers.squareSequence solverResult
-        <!> Solutions.findSolutionTo (1, Across)
-        |> testResult (
-            fun solution -> 
-                solution 
-                |> Solution.answer
-                |> should equal (Some(4))
-            )
+        |> expectedAnswer (1, Across) (Some 4)
 
     [<Test>]
     let ``concatenates characters in the squares of the inputs, and converts back to a number`` () =
         SquaresSequence([9; 9])
         |> toChallenge
         |> Solvers.squareSequence solverResult
-        <!> Solutions.findSolutionTo (1, Across)
-        |> testResult (
-            fun solution -> 
-                solution 
-                |> Solution.answer
-                |> should equal (Some(8181))
-            )
+        |> expectedAnswer (1, Across) (Some 8181)

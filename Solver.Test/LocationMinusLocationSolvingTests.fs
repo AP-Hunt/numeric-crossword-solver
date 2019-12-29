@@ -29,12 +29,7 @@ module LocationMinusLocationSolvingTests =
 
         challenge
         |> Solvers.locationMinusLocation fakeDispatcher solutions
-        <!> Solutions.findSolutionTo (1, Across)
-        |> testResult (
-            fun solution ->
-                solution
-                |> Solution.answer
-                |> should equal (Some(2))
-        )
+        |> expectedAnswer (1, Across) ((Some(2)))
+         
 
 
