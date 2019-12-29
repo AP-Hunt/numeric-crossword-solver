@@ -19,6 +19,7 @@ type Question =
     | SquaresSequence of List<int>
     | LocationMinusLocation of (Location * Location)
     | OneQuarterOfLocation of Location
+    | NMDigitsOfLocationSum of (int * int * Location)
     | Unknown
 
 type Challenge = (Location * Question)

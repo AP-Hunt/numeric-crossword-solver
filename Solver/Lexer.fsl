@@ -24,7 +24,12 @@ let LEX_CHALLENGE_PREFIX_ONEQUARTER = "One-quarter of"
 let comma = ',' | ", "
 let word_and = "and"
 let minus = "minus"
+let plus = "plus"
 let colon = ':'
+let first = "first" | "First"
+let last = "last" | "Last"
+let digits = "digits"
+let of = "of"
 
 // Misc character rules
 let white = [' ' '\t']+
@@ -40,8 +45,13 @@ rule read =
     | colon     { COLON }
     | word_and  { AND }
     | minus     { MINUS }
+    | plus      { PLUS }
     | down      { DIRECTION_DOWN } 
     | across    { DIRECTION_ACROSS }
+    | first     { FIRST }
+    | last      { LAST }
+    | digits    { DIGITS }
+    | of        { OF }
     | LEX_CHALLENGE_PREFIX_SQUARES      { PARSE_CHALLENGE_PREFIX_SQUARES }
     | LEX_CHALLENGE_PREFIX_ONEQUARTER   { PARSE_CHALLENGE_PREFIX_ONE_QUARTER }
     | _ { raise (Exception (sprintf "SyntaxError: Unexpected char: '%s' Line: %d Column: %d" (lexeme lexbuf) (lexbuf.StartPos.Line+1) lexbuf.StartPos.Column)) }

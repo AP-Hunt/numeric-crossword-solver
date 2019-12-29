@@ -36,6 +36,7 @@ let main argv =
         locationMinusLocation 5 Across (1, Across) (4, Down)
         locationMinusLocation 6 Down (3, Across) (4, Down)
         "8 across: One-quarter of 5 across"
+        "9 down: first 2 digits of 4 down plus last 3"
      ]
 
     printfn "Questions ===="

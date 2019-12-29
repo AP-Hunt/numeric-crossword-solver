@@ -38,7 +38,8 @@ let private solveDependents solverDispatcher solverResult dependentLocations =
     dependentLocations
     |> List.fold folder solverResult
     
-
+// Computes the squares of the inputs and concatenates them
+// e.g.[2; 4; 6] => [4; 16; 36;] => "41636"
 let squareSequence solverResult (challenge: Challenge) =
     let (_, q) = challenge
     
@@ -57,6 +58,7 @@ let squareSequence solverResult (challenge: Challenge) =
       
     | _ -> Error (badQuestionTypeMsg "squareSequence" q)
 
+// Substracts the answer at one location from the answer at another location
 let locationMinusLocation (solverDispatcher: SolverDispatcher) solverResult (challenge: Challenge) =
     match challenge with
     | _, LocationMinusLocation(a, b) ->
@@ -85,6 +87,7 @@ let locationMinusLocation (solverDispatcher: SolverDispatcher) solverResult (cha
 
     | _, q -> Error (badQuestionTypeMsg "locationMinusLocation" q)
 
+// Divides the answer at a location by four
 let oneQuarterOfLocation (solverDispatcher: SolverDispatcher) solverResult challenge =
     match challenge with
     | (_, OneQuarterOfLocation(location)) ->
@@ -106,6 +109,62 @@ let oneQuarterOfLocation (solverDispatcher: SolverDispatcher) solverResult chall
 
     | (_, q) -> Error(badQuestionTypeMsg "oneQuarterOfLocation" q)
 
+// Sums the first N digits at a location, and the last M digits at location
+// e.g. 
+// (2, Across) = 22944
+// N = 2
+// M = 3
+// Answer = (2+2) + (9+4+4) = 23
+let nmDigitsOfLocationSum solverDispatcher solverResult challenge =
+    match challenge with
+    | (_, NMDigitsOfLocationSum(n, m, location)) ->
+        let sumSeqOfIntChars (chars: char seq) =
+            chars 
+            |> Seq.map (fun x -> x.ToString())
+            |> Seq.map Convert.ToInt32
+            |> Seq.sum
+            
+        // Passes the solution through if N 
+        // is small enough. Otherwise,
+        // sends along an error.
+        let validateNMSize n m solution =
+            let answer = (solution |> Solution.answer).Value.ToString()
+
+            if n > (answer.Length) then
+                Error(sprintf "cannot sum the first %d digits because the answer (%s) is only %d characters long" n answer (answer.Length))                
+            elif m > (answer.Length) then
+                Error(sprintf "cannot sum the last %d digits because the answer (%s) is only %d characters long" m answer (answer.Length))
+            else
+                Ok(solution)    
+                
+
+        let sumNFirstAndLastMDigits n m solution =
+            let solutionAnswerAsString = (solution |> Solution.answer).Value.ToString()
+            let idx x = (x - 1) // Index of nth digit is n - 1
+            let len = solutionAnswerAsString.Length
+
+            let firstNDigits = solutionAnswerAsString.[.. (idx n)]
+            let lastNDigits = solutionAnswerAsString.[(len - m)..]
+
+            let answer = 
+                [firstNDigits; lastNDigits]
+                |> List.map sumSeqOfIntChars
+                |> List.sum
+
+            Ok(Some answer)
+
+        let solverAfterSolverDependents =
+            [location]
+            |> solveDependents solverDispatcher solverResult
+
+        solverAfterSolverDependents
+        <!> (Solutions.findSolutionTo location)
+        <!> validateNMSize n m
+        <!> sumNFirstAndLastMDigits n m
+        <!> setSolutionAnswer challenge solverAfterSolverDependents
+
+    | (_, q) -> Error(badQuestionTypeMsg "nDigitsOfLocationSum" q)
+
 let rec solverDispatcher location solverResult : SolverResult =   
     solverResult
     <!> fun(solutions) ->
@@ -120,7 +179,8 @@ let rec solverDispatcher location solverResult : SolverResult =
             else
                 let challenge = solution |> Solution.challenge
                 match challenge with
-                | _, (SquaresSequence _)            -> squareSequence solverResult challenge
-                | _, (LocationMinusLocation (_, _)) -> locationMinusLocation (solverDispatcher) solverResult challenge
-                | _, (OneQuarterOfLocation(_))      -> oneQuarterOfLocation (solverDispatcher) solverResult challenge
-                | _, (Unknown)                      -> Error("unknown challenge")
+                | _, (SquaresSequence(_))               -> squareSequence           solverResult challenge
+                | _, (LocationMinusLocation (_, _))     -> locationMinusLocation    (solverDispatcher) solverResult challenge
+                | _, (OneQuarterOfLocation(_))          -> oneQuarterOfLocation     (solverDispatcher) solverResult challenge
+                | _, (NMDigitsOfLocationSum(_, _, _))   -> nmDigitsOfLocationSum    (solverDispatcher) solverResult challenge
+                | _, (Unknown)                          -> Error("unknown challenge")

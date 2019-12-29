@@ -30,5 +30,4 @@ module Helpers =
             solverResult
             <!> Solutions.set ((location, Unknown), Some(answerFixture))
             
-
         fn
