@@ -2,6 +2,7 @@
 
 open Types
 open System
+open Solutions
 
 type SolverResult = Result<Solutions, string>
 let inline (>=>) fn x = Result.bind fn x

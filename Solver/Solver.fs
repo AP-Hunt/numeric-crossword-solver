@@ -1,6 +1,7 @@
 ﻿module Solver
 
 open Types
+open Solution
 open Solvers
 
 let rec solveAllRec (dispatcher: SolverDispatcher) (solverResult: SolverResult) (index: int) =

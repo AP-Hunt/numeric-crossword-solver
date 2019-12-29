@@ -6,6 +6,8 @@
 
   <ItemGroup>
     <Compile Include="Types.fs" />
+    <Compile Include="Solution.fs" />
+    <Compile Include="Solutions.fs" />
     <None Include="Parser.fsy" />
     <None Include="Lexer.fsl" />
     <Compile Include="Parser.fs" />
