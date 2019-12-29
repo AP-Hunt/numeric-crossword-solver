@@ -19,14 +19,14 @@ module NMDigitsOfLocationSumSolvingTests =
         let n = 2
         let m = 3
         let expected = (2+2) + (2+4+4) // Explicit sum here to make it clear how the sum works
-        let challenge = NMDigitsOfLocationSum(n, m, (2, Across))
+        let question = NMDigitsOfLocationSum(n, m, (2, Across))
 
         let solutions: SolverResult = Ok([
-            ((1, Across), challenge), None;
-            ((2, Across), Unknown), None;
+            { Challenge = {Location = (1, Across); Question = question}; Answer = None};
+            { Challenge = {Location = (2, Across); Question = Unknown}; Answer = None};
         ])
 
-        ((1, Across), challenge)
+        {Location = (1, Across); Question = question}
         |> Solvers.nmDigitsOfLocationSum fakeDispatcher solutions
         |> expectedAnswer (1, Across) (Some expected)
 
@@ -38,14 +38,14 @@ module NMDigitsOfLocationSumSolvingTests =
         
         let fakeDispatcher = Helpers.newFakeDispatcher (fixtures |> Map.ofList)
 
-        let challenge = NMDigitsOfLocationSum(5, 1, (2, Across))
+        let question = NMDigitsOfLocationSum(5, 1, (2, Across))
 
         let solutions: SolverResult = Ok([
-            ((1, Across), challenge), None;
-            ((2, Across), Unknown), None;
+            { Challenge = {Location = (1, Across); Question = question}; Answer = None};
+            { Challenge = {Location = (2, Across); Question = Unknown}; Answer = None};
         ])
 
-        ((1, Across), challenge)
+        { Location = (1, Across); Question = question}
         |> Solvers.nmDigitsOfLocationSum fakeDispatcher solutions
         |> (fun r ->
                 match r with
@@ -61,14 +61,14 @@ module NMDigitsOfLocationSumSolvingTests =
     
         let fakeDispatcher = Helpers.newFakeDispatcher (fixtures |> Map.ofList)
 
-        let challenge = NMDigitsOfLocationSum(1, 5, (2, Across))
+        let question = NMDigitsOfLocationSum(1, 5, (2, Across))
 
         let solutions: SolverResult = Ok([
-            ((1, Across), challenge), None;
-            ((2, Across), Unknown), None;
+            { Challenge = {Location = (1, Across); Question = question}; Answer = None};
+            { Challenge = {Location = (2, Across); Question = Unknown}; Answer = None};
         ])
 
-        ((1, Across), challenge)
+        {Location = (1, Across); Question = question}
         |> Solvers.nmDigitsOfLocationSum fakeDispatcher solutions
         |> (fun r ->
                 match r with

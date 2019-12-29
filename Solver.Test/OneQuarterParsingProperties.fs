@@ -21,5 +21,6 @@ module OneQuarterParsingProperties =
             let challenge = parseQuestionText questionText
 
             match challenge with
-            | Some(_, OneQuarterOfLocation(loc)) -> loc = input
+            | Some {Location = _; Question = OneQuarterOfLocation(loc)} 
+                -> loc = input
             | _ -> false

@@ -24,7 +24,8 @@ module LocationMinusLocationParsingProperties =
             let challenge = parseQuestionText questionText
 
             match challenge with
-            | Some (_, LocationMinusLocation (locA, locB)) -> (locA = a) && (locB = b)
+            | Some {Location = _; Question = LocationMinusLocation (locA, locB)} 
+                -> (locA = a) && (locB = b)
             | Some _ -> false
             | None -> false
 

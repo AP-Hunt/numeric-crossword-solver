@@ -42,7 +42,7 @@ root:
     | challenge { Some $1 }
 
 challenge:
-    | location COLON question { ($1, $3) }
+    | location COLON question { {Location = $1; Question = $3} }
     | { failwith "unable to parse challenge '%s'" }
 
 question:

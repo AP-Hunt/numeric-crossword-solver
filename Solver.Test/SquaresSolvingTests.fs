@@ -10,7 +10,7 @@ open Helpers
 module SquaresSolvingTests =
 
     let toChallenge question =
-        (1, Across), question
+        { Location = (1, Across); Question = question }
 
     let solverResult: SolverResult = Ok([])
 

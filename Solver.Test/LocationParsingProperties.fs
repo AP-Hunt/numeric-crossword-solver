@@ -22,5 +22,5 @@ module LocationParsingProperties =
             let challenge = parseQuestionText questionText
 
             match challenge with
-            | Some (location, _) -> location = loc
+            | Some c -> c.Location = loc
             | None -> false

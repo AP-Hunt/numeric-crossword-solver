@@ -2,17 +2,13 @@
 
 open Types
 
-type Solution = (Challenge * int option)
+type Solution = 
+    {
+        Challenge: Challenge
+        Answer: int option
+    }
 
-let answer (sol: Solution) =
-    let (_, answer) = sol
-    answer
-
-let location (sol: Solution) =
-    let ((loc, _), _) = sol
-    loc
-
-let challenge (sol: Solution) =
-    let (c, _) = sol
-    c
+let answer (sol: Solution) = sol.Answer
+let location (sol: Solution) = sol.Challenge.Location
+let challenge (sol: Solution) = sol.Challenge
 

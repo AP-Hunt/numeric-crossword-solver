@@ -21,7 +21,7 @@ module NMDigitsOfLocationSumParsingProperties =
             let challenge = parseQuestionText questionText
 
             match challenge with
-            | Some (_, NMDigitsOfLocationSum (_, _, loc')) -> (loc' = loc)
+            | Some {Location = _; Question = NMDigitsOfLocationSum (_, _, loc')} -> (loc' = loc)
             | Some _ -> false
             | None -> false
 
@@ -34,7 +34,7 @@ module NMDigitsOfLocationSumParsingProperties =
             let challenge = parseQuestionText questionText
 
             match challenge with
-            | Some (_, NMDigitsOfLocationSum (n', _, _)) -> (n' = n)
+            | Some {Location = _; Question = NMDigitsOfLocationSum (n', _, _)} -> (n' = n)
             | Some _ -> false
             | None -> false
 
@@ -47,6 +47,6 @@ module NMDigitsOfLocationSumParsingProperties =
             let challenge = parseQuestionText questionText
 
             match challenge with
-            | Some (_, NMDigitsOfLocationSum (_, m', _)) -> (m' = m)
+            | Some {Location = _; Question = NMDigitsOfLocationSum (_, m', _)} -> (m' = m)
             | Some _ -> false
             | None -> false

@@ -36,6 +36,7 @@ module SquaresQuestionParsingProperties =
             let challenge = parseQuestionText questionText
 
             match challenge with
-            | Some (_, SquaresSequence xs) -> (List.compareWith intListComparator ints xs) = 0
+            | Some {Location = _; Question = SquaresSequence xs} 
+                -> (List.compareWith intListComparator ints xs) = 0
             | Some _ -> false
             | None -> false

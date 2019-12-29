@@ -16,14 +16,14 @@ module OneQuarterSolvingTests =
         
         let fakeDispatcher = Helpers.newFakeDispatcher (fixtures |> Map.ofList)
 
-        let challenge = OneQuarterOfLocation((2, Across))
+        let question = OneQuarterOfLocation((2, Across))
 
         let solutions: SolverResult = Ok([
-            ((1, Across), challenge), None;
-            ((2, Across), Unknown), None;
+            {Challenge = {Location = (1, Across); Question = question}; Answer = None};
+            {Challenge = {Location = (2, Across); Question = Unknown}; Answer = None };
         ])
 
-        ((1, Across), challenge)
+        { Location = (1, Across); Question = question }
         |> Solvers.oneQuarterOfLocation fakeDispatcher solutions
         |> expectedAnswer (1, Across) (Some(25))
         

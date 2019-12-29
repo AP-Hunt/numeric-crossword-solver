@@ -37,7 +37,7 @@ let solveAll (dispatcher: Solvers.SolverDispatcher) challenges =
     else
         let solutions: Solution list =
             challenges
-            |> List.map(fun challenge -> (challenge, None))
+            |> List.map(fun challenge -> {Challenge = challenge; Answer = None})
 
         let initialResult: SolverResult = Ok(solutions)
 

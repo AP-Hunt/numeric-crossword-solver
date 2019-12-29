@@ -16,7 +16,7 @@ module SolverTests =
 
     [<Test>]
     let ``a single challenge with no dependencies can be solved`` () =
-        let challenge = (1, Across), SquaresSequence([1;2])
+        let challenge = {Location = (1, Across); Question = SquaresSequence([1;2])}
         
         solveAll Solvers.solverDispatcher [challenge]
         |> testResult(
@@ -36,9 +36,9 @@ module SolverTests =
         let threeAcross = (3, Across)
 
         let challenges = [
-            oneAcross, SquaresSequence([2; 2]);
-            twoDown, SquaresSequence([9]);
-            threeAcross, LocationMinusLocation((2, Down), (1, Across));
+            { Location = oneAcross; Question = SquaresSequence([2; 2])};
+            { Location = twoDown; Question = SquaresSequence([9])};
+            { Location = threeAcross; Question = LocationMinusLocation((2, Down), (1, Across))};
         ]
         
         solveAll Solvers.solverDispatcher challenges

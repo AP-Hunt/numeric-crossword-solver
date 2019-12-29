@@ -3,6 +3,7 @@
 open FsUnit
 open Types
 open Solvers
+open Solution
 
 module Helpers =    
     let testResult fn result =
@@ -24,10 +25,16 @@ module Helpers =
 
 
     let newFakeDispatcher solutionFixtures =
-        let fn (location: Location) solverResult =      
-            let answerFixture = solutionFixtures |> Map.find location
-            
+        let fn (location: Location) solverResult =        
+            let newSolution = {
+                Answer = Some (solutionFixtures |> Map.find location)
+                Challenge = {
+                    Location = location
+                    Question = Unknown
+                }
+            }
+
             solverResult
-            <!> Solutions.set ((location, Unknown), Some(answerFixture))
+            <!> Solutions.set newSolution
             
         fn

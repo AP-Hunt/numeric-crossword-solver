@@ -22,13 +22,12 @@ type Question =
     | NMDigitsOfLocationSum of (int * int * Location)
     | Unknown
 
-type Challenge = (Location * Question)
+type Challenge = 
+    {
+        Location: Location
+        Question: Question
+    }
 
 module Challenge =
-    let location challenge =
-        let (loc, _) = challenge
-        loc
-
-    let question challenge = 
-        let (_, q) = challenge
-        q
+    let location challenge = challenge.Location
+    let question challenge =  challenge.Question

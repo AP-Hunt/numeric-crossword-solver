@@ -10,22 +10,23 @@ open Helpers
 module LocationMinusLocationSolvingTests =
 
     let toChallenge question =
-        (1, Across), question
+        { Location = (1, Across); Question = question}
 
     [<Test>]
     let ``subtracts the solution at location A from the solution at location B``() =
         let challenge = LocationMinusLocation((4, Across), (5, Across)) |> toChallenge
         let solutions: SolverResult = Ok([
-            challenge, None;
-            ((4, Across), Unknown), None;
-            ((5, Across), Unknown), None
+            {Challenge = challenge; Answer = None};
+            {Challenge = {Location = (4, Across); Question = Unknown}; Answer = None};
+            {Challenge = {Location = (5, Across); Question = Unknown}; Answer = None};
         ])
 
-        let fakeDispatcher (location: Location) solverResult =
-            match location with
-            | (4, Across) -> solverResult <!> Solutions.set ((location, Unknown), Some(4))
-            | (5, Across) -> solverResult <!> Solutions.set ((location, Unknown), Some(2))
-            | _ -> Error("unexpected location")
+        let fixtures = [
+            (4, Across), 4;
+            (5, Across), 2;
+        ]
+
+        let fakeDispatcher = newFakeDispatcher (fixtures |> Map.ofList)
 
         challenge
         |> Solvers.locationMinusLocation fakeDispatcher solutions

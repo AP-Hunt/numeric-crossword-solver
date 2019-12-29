@@ -28,7 +28,7 @@ let private badQuestionTypeMsg solverName question =
 
 let private setSolutionAnswer challenge solutions answer =
     solutions
-    <!> Solutions.set (challenge, answer)
+    <!> Solutions.set { Challenge = challenge; Answer = answer}
 
 let private solveDependents solverDispatcher solverResult dependentLocations =
     let folder result elem =
@@ -41,7 +41,7 @@ let private solveDependents solverDispatcher solverResult dependentLocations =
 // Computes the squares of the inputs and concatenates them
 // e.g.[2; 4; 6] => [4; 16; 36;] => "41636"
 let squareSequence solverResult (challenge: Challenge) =
-    let (_, q) = challenge
+    let q = challenge.Question
     
     match q with
     | SquaresSequence ints -> 
@@ -53,15 +53,17 @@ let squareSequence solverResult (challenge: Challenge) =
             |> Convert.ToInt32
 
         solverResult
-        <!> Solutions.set (challenge, Some(concattedInts))
+        <!> Solutions.set { Challenge = challenge; Answer = Some(concattedInts)}
         
       
     | _ -> Error (badQuestionTypeMsg "squareSequence" q)
 
 // Substracts the answer at one location from the answer at another location
 let locationMinusLocation (solverDispatcher: SolverDispatcher) solverResult (challenge: Challenge) =
-    match challenge with
-    | _, LocationMinusLocation(a, b) ->
+    let q = challenge.Question
+
+    match q with
+    | LocationMinusLocation(a, b) ->
         let extractChallengeTuple solutions =
             let solutionA::solutionB::_ = solutions
             Ok((solutionA, solutionB))
@@ -85,12 +87,14 @@ let locationMinusLocation (solverDispatcher: SolverDispatcher) solverResult (cha
         <!> subtractAFromB
         <!> setSolutionAnswer challenge solutionsAfterSolvingDependents
 
-    | _, q -> Error (badQuestionTypeMsg "locationMinusLocation" q)
+    | _ -> Error (badQuestionTypeMsg "locationMinusLocation" q)
 
 // Divides the answer at a location by four
 let oneQuarterOfLocation (solverDispatcher: SolverDispatcher) solverResult challenge =
-    match challenge with
-    | (_, OneQuarterOfLocation(location)) ->
+    let q = challenge.Question
+
+    match q with
+    |  OneQuarterOfLocation(location) ->
         let divideAnswerByFour solution =
             let answer = (solution |> Solution.answer).Value
             Ok(Some((answer/4)))
@@ -107,7 +111,7 @@ let oneQuarterOfLocation (solverDispatcher: SolverDispatcher) solverResult chall
         <!> setSolutionAnswer challenge solverAfterSolvingDependents
 
 
-    | (_, q) -> Error(badQuestionTypeMsg "oneQuarterOfLocation" q)
+    | _ -> Error(badQuestionTypeMsg "oneQuarterOfLocation" q)
 
 // Sums the first N digits at a location, and the last M digits at location
 // e.g. 
@@ -116,8 +120,10 @@ let oneQuarterOfLocation (solverDispatcher: SolverDispatcher) solverResult chall
 // M = 3
 // Answer = (2+2) + (9+4+4) = 23
 let nmDigitsOfLocationSum solverDispatcher solverResult challenge =
-    match challenge with
-    | (_, NMDigitsOfLocationSum(n, m, location)) ->
+    let q = challenge.Question
+
+    match q with
+    | NMDigitsOfLocationSum(n, m, location) ->
         let sumSeqOfIntChars (chars: char seq) =
             chars 
             |> Seq.map (fun x -> x.ToString())
@@ -163,7 +169,7 @@ let nmDigitsOfLocationSum solverDispatcher solverResult challenge =
         <!> sumNFirstAndLastMDigits n m
         <!> setSolutionAnswer challenge solverAfterSolverDependents
 
-    | (_, q) -> Error(badQuestionTypeMsg "nDigitsOfLocationSum" q)
+    | _ -> Error(badQuestionTypeMsg "nDigitsOfLocationSum" q)
 
 let rec solverDispatcher location solverResult : SolverResult =   
     solverResult
@@ -178,9 +184,9 @@ let rec solverDispatcher location solverResult : SolverResult =
                 solverResult
             else
                 let challenge = solution |> Solution.challenge
-                match challenge with
-                | _, (SquaresSequence(_))               -> squareSequence           solverResult challenge
-                | _, (LocationMinusLocation (_, _))     -> locationMinusLocation    (solverDispatcher) solverResult challenge
-                | _, (OneQuarterOfLocation(_))          -> oneQuarterOfLocation     (solverDispatcher) solverResult challenge
-                | _, (NMDigitsOfLocationSum(_, _, _))   -> nmDigitsOfLocationSum    (solverDispatcher) solverResult challenge
-                | _, (Unknown)                          -> Error("unknown challenge")
+                match challenge.Question with
+                | SquaresSequence(_)                -> squareSequence           solverResult challenge
+                | LocationMinusLocation (_, _)      -> locationMinusLocation    (solverDispatcher) solverResult challenge
+                | OneQuarterOfLocation(_)           -> oneQuarterOfLocation     (solverDispatcher) solverResult challenge
+                | NMDigitsOfLocationSum(_, _, _)    -> nmDigitsOfLocationSum    (solverDispatcher) solverResult challenge
+                | Unknown                           -> Error("unknown challenge")
