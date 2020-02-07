@@ -15,6 +15,11 @@ module Helpers =
 
     let inline (<&>) result fn = testResult fn result
 
+    let extractOK result =
+        match result with
+        | Ok(x) -> x
+        | Error(s) -> failwith s
+
     let expectedAnswer location answer solutions =
         solutions
         <!> Solutions.findSolutionTo location

@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <Compile Include="Helpers.fs" />
+    <Compile Include="GridTests.fs" />
     <Compile Include="LocationParsingProperties.fs" />
     <Compile Include="SquaresSequenceParsingProperties.fs" />
     <Compile Include="SquaresSolvingTests.fs" />
